@@ -35,14 +35,14 @@ on stdin when Flipkart asks for one.
 
 ```
 order_id               sku                return_status                return_id          task_status
-OD337960018546         ETHH7Z3FJTCRQQNB   Placed                       CR26060000000001   Done
-OD337915105120         VPAHNMQYW9PYYWH8   Out of window                None               Done
-OD337915012166         TSHG9FQZSSAUGKUP   Already Cancelled & Refunded None               Done
-OD337983703007         HMBH8MV7VA3PCJDQ   Not yet delivered            None               Needs human review
-OD337974610559         JEAHJHY3CBJYNZNW   Placed                       CR26060000000002   Done
-OD337974610559         JEAH87B2GRCCS3DZ   Placed                       CR26060000000003   Done
-OD337974610559         DREHHF5SKMVFGUKU   Out of window                None               Done
-OD337974610559         DREHK6H2PN8XX6ZM   Support Needed               None               Needs human review
+OD337960018546978100         ETHH7Z3FJTCRQQNB   Placed                       CR26060000000001   Done
+OD337915105120141100         VPAHNMQYW9PYYWH8   Out of window                None               Done
+OD337915012166989100         TSHG9FQZSSAUGKUP   Already Cancelled & Refunded None               Done
+OD337983703007211100         HMBH8MV7VA3PCJDQ   Not yet delivered            None               Needs human review
+OD337974610559997100         JEAHJHY3CBJYNZNW   Placed                       CR26060000000002   Done
+OD337974610559997100         JEAH87B2GRCCS3DZ   Placed                       CR26060000000003   Done
+OD337974610559997100         DREHHF5SKMVFGUKU   Out of window                None               Done
+OD337974610559997100         DREHK6H2PN8XX6ZM   Support Needed               None               Needs human review
 403-7712345-9911223    B0C1AZ1111         Placed                       RMA88000004        Done
 403-7712345-9911223    B0C1AZ2222         Placed                       RMA88000005        Done
 403-7712345-9911223    B0C1AZ3333         Out of window                None               Done
@@ -50,7 +50,7 @@ OD337974610559         DREHK6H2PN8XX6ZM   Support Needed               None     
 403-5540099-1122334    B0C1AZ5555         Placed                       RMA88000007        Done
 ```
 
-Order `OD337974610559` is the case the brief centres on: one order, four SKUs,
+Order `OD337974610559997100` is the case the brief centres on: one order, four SKUs,
 four different outcomes, none of them affecting the others.
 
 ## Architecture
@@ -162,7 +162,7 @@ typed once rather than once per run. The agent does not attempt to intercept SMS
 * **Header aliasing.** `Order Id`, `Return Window`, `Refund ID` and
   `No of Product` are matched case, space and punctuation insensitively, and the
   header row is located rather than assumed.
-* **Multi-item cells are expanded.** Order `OD337974610559` stacks four product
+* **Multi-item cells are expanded.** Order `OD337974610559997100` stacks four product
   links in one `Product Link` cell, interleaved with pasted chat text. The
   importer extracts every URL, keys them by Flipkart's `pid`, removes duplicate
   pastes, and emits one row per SKU.

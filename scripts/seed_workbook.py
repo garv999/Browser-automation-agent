@@ -38,27 +38,35 @@ from mock_site.fixtures import ALL_ORDERS  # noqa: E402
 FLIPKART_LINK = "https://www.flipkart.com/p/itm{slug}?pid={pid}&marketplace=FLIPKART"
 AMAZON_LINK = "https://www.amazon.in/dp/{pid}"
 
-# Transcribed from the supplied Test Orders sheet. `days_ago` is relative to the
-# seeding date so the file stays meaningful whenever it is regenerated.
+# Transcribed verbatim from the supplied Test Orders sheet, with its own dates
+# rather than dates synthesised relative to the seeding run. Order IDs are the
+# full 20-character Flipkart values (OD + 18 digits); the sheet wraps them across
+# two lines in the Order Id column, and a transcription that stops at the wrap
+# produces an ID the platform cannot resolve.
+#
+# Where the sheet gives a delivery *range* ("5-6 July") the later day is used, on
+# the same reasoning as the parser: assuming the earlier day shortens the window
+# and risks skipping an item that is still returnable.
 SHEET_ROWS = [
-    # (order_id, pid, product_name, amount, qty, window, delivered_days_ago)
-    ("OD337915012166", "TSHG9FQZSSAUGKUP", "Wearza Colorblock Men Round Neck Black Yellow T-shirt", 284, 1, 10, 3),
-    ("OD337915105120", "VPAHNMQYW9PYYWH8", "Gulab Thar Women Kurta", 350, 1, 7, 34),
-    ("OD337915117555", "KTAHKYRPHHMY4FK3", "Vedika Fashiondesgin Women Striped Printed Flared Kurta", 355, 1, 10, 34),
-    ("OD337960018546", "ETHH7Z3FJTCRQQNB", "Bunaai Dhaga Women Kurta Palazzo Dupatta Set", 686, 1, 10, 2),
-    # One order, four SKUs — the sheet held these in a single cell.
-    ("OD337974610559", "JEAHJHY3CBJYNZNW", "Dolsia Regular Women Blue Jeans", 645, 1, 10, 1),
-    ("OD337974610559", "JEAH87B2GRCCS3DZ", "Tokyo Talkies Loose Fit Women Blue Jeans", 645, 1, 10, 1),
-    ("OD337974610559", "DREHHF5SKMVFGUKU", "Vasan Women A-Line Maroon Midi Calf Length Dress", 645, 1, 7, 30),
-    ("OD337974610559", "DREHK6H2PN8XX6ZM", "Shivanshcloset Women Fit Flare Blue Beige Maxi Full Length Dress", 644, 1, 10, 1),
-    # Two sarees on one order.
-    ("OD337983106511", "SARHMZB7GBADA4FK", "Arti Faym Embroidered Bollywood Satin Silk Blend Saree", 955, 1, 10, 2),
-    ("OD337983106511", "SARHRKVNUD2PSCGY", "Brahmani Creation Embroidered Bollywood Georgette Saree", 954, 1, 10, 2),
-    # Four shoulder bags, not yet delivered at the time the sheet was captured.
-    ("OD337983703007", "HMBH8MV7VA3PCJDQ", "Carrylux Women Pink Shoulder Bag", 395, 1, 10, -2),
-    ("OD337983703007", "HMBH8KTQFP5BPSZG", "Carrylux Women Beige Shoulder Bag", 395, 1, 10, -2),
-    ("OD337983703007", "HMBH7MYANGQFUKJH", "Carrylux Women Red Shoulder Bag", 396, 1, 10, -2),
-    ("OD337983703007", "HMBH8BNZ6JXFJCD9", "Carrylux Women Black Shoulder Bag", 396, 1, 10, -2),
+    # (order_id, pid, product_name, amount, qty, window_days, order_date, delivery_date)
+    ("OD337915012166989100", "TSHG9FQZSSAUGKUP", "Wearza Colorblock Men Round Neck Black Yellow T-shirt", 284, 1, 10, date(2026, 6, 24), date(2026, 6, 27)),
+    ("OD337915105120141100", "VPAHNMQYW9PYYWH8", "Gulab Thar Women Kurta", 350, 1, 7, date(2026, 6, 24), date(2026, 6, 27)),
+    ("OD337915117555423100", "KTAHKYRPHHMY4FK3", "Vedika Fashiondesgin Women Striped Printed Flared Kurta", 355, 1, 10, date(2026, 6, 24), date(2026, 6, 27)),
+    ("OD337960018546978100", "ETHH7Z3FJTCRQQNB", "Bunaai Dhaga Women Kurta Palazzo Dupatta Set", 686, 1, 10, date(2026, 6, 29), date(2026, 7, 2)),
+    # One order, four SKUs — the sheet held these in a single cell. Amounts split
+    # from the order total of 2579 across its 4 products.
+    ("OD337974610559997100", "JEAHJHY3CBJYNZNW", "Dolsia Regular Women Blue Jeans", 645, 1, 10, date(2026, 7, 1), date(2026, 7, 6)),
+    ("OD337974610559997100", "JEAH87B2GRCCS3DZ", "Tokyo Talkies Loose Fit Women Blue Jeans", 645, 1, 10, date(2026, 7, 1), date(2026, 7, 6)),
+    ("OD337974610559997100", "DREHHF5SKMVFGUKU", "Vasan Women A-Line Maroon Midi Calf Length Dress", 645, 1, 10, date(2026, 7, 1), date(2026, 7, 6)),
+    ("OD337974610559997100", "DREHK6H2PN8XX6ZM", "Shivanshcloset Women Fit Flare Blue Beige Maxi Full Length Dress", 644, 1, 10, date(2026, 7, 1), date(2026, 7, 6)),
+    # Two sarees on one order; total 1909.
+    ("OD337983106511516100", "SARHMZB7GBADA4FK", "Arti Faym Embroidered Bollywood Satin Silk Blend Saree", 955, 1, 10, date(2026, 7, 2), date(2026, 7, 7)),
+    ("OD337983106511516100", "SARHRKVNUD2PSCGY", "Brahmani Creation Embroidered Bollywood Georgette Saree", 954, 1, 10, date(2026, 7, 2), date(2026, 7, 7)),
+    # Four shoulder bags; total 1582. Not yet delivered when the sheet was taken.
+    ("OD337983703007211100", "HMBH8MV7VA3PCJDQ", "Carrylux Women Pink Shoulder Bag", 395, 1, 10, date(2026, 7, 2), date(2026, 7, 9)),
+    ("OD337983703007211100", "HMBH8KTQFP5BPSZG", "Carrylux Women Beige Shoulder Bag", 395, 1, 10, date(2026, 7, 2), date(2026, 7, 9)),
+    ("OD337983703007211100", "HMBH7MYANGQFUKJH", "Carrylux Women Red Shoulder Bag", 396, 1, 10, date(2026, 7, 2), date(2026, 7, 9)),
+    ("OD337983703007211100", "HMBH8BNZ6JXFJCD9", "Carrylux Women Black Shoulder Bag", 396, 1, 10, date(2026, 7, 2), date(2026, 7, 9)),
 ]
 
 SHEET_ADDRESS = "Sample Address, Sector 42, Gurgaon, Haryana - 122009, India"
@@ -98,10 +106,15 @@ def rows_from_fixtures() -> list[dict]:
 
 
 def rows_from_sheet() -> list[dict]:
-    today = date.today()
+    """The sheet's own orders, with the sheet's own dates.
+
+    These are historical: the sheet was captured in early July 2026, so most of
+    its return windows have since closed. That is a true statement about the
+    data, and the agent reporting "out of window" for them is the correct result
+    rather than a bug in the seeder.
+    """
     rows: list[dict] = []
-    for order_id, pid, name, amount, qty, window, days_ago in SHEET_ROWS:
-        delivered = today - timedelta(days=days_ago)
+    for order_id, pid, name, amount, qty, window, ordered, delivered in SHEET_ROWS:
         rows.append(
             {
                 "platform": "Flipkart",
@@ -111,7 +124,7 @@ def rows_from_sheet() -> list[dict]:
                 "product_link": FLIPKART_LINK.format(slug=_slug(name), pid=pid),
                 "quantity": qty,
                 "amount": amount * qty,
-                "order_date": delivered - timedelta(days=3),
+                "order_date": ordered,
                 "delivery_date": delivered,
                 "return_window_days": window,
                 "address": SHEET_ADDRESS,

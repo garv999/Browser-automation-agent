@@ -46,7 +46,7 @@ def test_login_then_orders_shows_the_account_marker(client):
 
 def test_out_of_window_item_shows_no_return_button(client):
     login(client)
-    page = client.get("/flipkart/orders/OD337915105120").data.decode()
+    page = client.get("/flipkart/orders/OD337915105120141100").data.decode()
     assert 'data-testid="return-unavailable"' in page
     assert "Return window closed" in page
     assert 'data-testid="return-button"' not in page
@@ -56,7 +56,7 @@ def test_support_needed_item_shows_neither_button_nor_reason(client):
     """The sheet's hardest case: the platform simply offers nothing. The agent
     has to notice the absence rather than read an explanation."""
     login(client)
-    page = client.get("/flipkart/orders/OD337974610559").data.decode()
+    page = client.get("/flipkart/orders/OD337974610559997100").data.decode()
     assert "Shivanshcloset" in page
     assert page.count('data-testid="return-button"') == 2  # only the two eligible jeans
 
@@ -65,7 +65,7 @@ def test_placing_a_return_yields_an_id_and_a_refund(client):
     login(client)
     response = client.post(
         "/flipkart/returns/create",
-        data={"order_id": "OD337960018546", "index": "0", "reason": "Item is not as described"},
+        data={"order_id": "OD337960018546978100", "index": "0", "reason": "Item is not as described"},
     )
     body = response.data.decode()
     assert 'data-testid="return-confirmation"' in body
@@ -119,7 +119,7 @@ def test_fail_next_makes_one_return_error(client):
     client.post("/__fail_next")
     response = client.post(
         "/flipkart/returns/create",
-        data={"order_id": "OD337960018546", "index": "0"},
+        data={"order_id": "OD337960018546978100", "index": "0"},
     )
     assert response.status_code == 500
     assert b"data-testid=\"return-confirmation\"" not in response.data

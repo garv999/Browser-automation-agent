@@ -47,18 +47,18 @@ def supplied_sheet(tmp_path):
     ws.append([
         "Sample Address, Sector 42, Gurgaon", "9000000001",
         "https://www.flipkart.com/wearza-colorblock-men-round-neck-black-yellow-t-shirt/p/itm709?pid=TSHG9FQZSSAUGKUP&marketplace=FLIPKART",
-        284, 1, "24 June 2026", "OD337915012166", "27 June", "10 Days", "Pending",
+        284, 1, "24 June 2026", "OD337915012166989100", "27 June", "10 Days", "Pending",
         "Flipkart", "", "", "", "", "",
     ])
     ws.append([
         "Sample Address, Sector 42, Gurgaon", "9000000001",
         "https://www.flipkart.com/gulab-thar/p/itm076?pid=VPAHNMQYW9PYYWH8&marketplace=FLIPKART",
-        350, 1, "24 June 2026", "OD337915105120", "27 June", "7 Days", "Pending",
+        350, 1, "24 June 2026", "OD337915105120141100", "27 June", "7 Days", "Pending",
         "Flipkart", "", "", "", "", "",
     ])
     ws.append([
         "Sample Address 2, New Delhi - 110041", "9000000002",
-        MESSY_CELL, 2579, 4, "01 July 2026", "OD337974610559", "5-6 July", "10 Days",
+        MESSY_CELL, 2579, 4, "01 July 2026", "OD337974610559997100", "5-6 July", "10 Days",
         "Pending", "Flipkart", "", "", "", "", "",
     ])
 
@@ -144,7 +144,7 @@ def test_supplied_sheet_imports_to_line_items(supplied_sheet, tmp_path):
 
     # 2 single-item orders + 4 SKUs on the multi-item order.
     assert len(rows) == 6
-    multi = [r for r in rows if r["order_id"] == "OD337974610559"]
+    multi = [r for r in rows if r["order_id"] == "OD337974610559997100"]
     assert len(multi) == 4
     assert len({r["sku"] for r in multi}) == 4
 
@@ -153,10 +153,10 @@ def test_imported_windows_and_dates_are_usable(supplied_sheet):
     rows = import_rows(supplied_sheet, None, lambda m: None)
     by_order = {r["order_id"]: r for r in rows}
 
-    assert by_order["OD337915012166"]["return_window_days"] == 10
-    assert by_order["OD337915012166"]["delivery_date"] == date(2026, 6, 27)
-    assert by_order["OD337915105120"]["return_window_days"] == 7
-    assert by_order["OD337974610559"]["delivery_date"] == date(2026, 7, 6)
+    assert by_order["OD337915012166989100"]["return_window_days"] == 10
+    assert by_order["OD337915012166989100"]["delivery_date"] == date(2026, 6, 27)
+    assert by_order["OD337915105120141100"]["return_window_days"] == 7
+    assert by_order["OD337974610559997100"]["delivery_date"] == date(2026, 7, 6)
 
     # Nothing may be left without the two fields eligibility depends on.
     assert all(r["delivery_date"] is not None for r in rows)
@@ -165,7 +165,7 @@ def test_imported_windows_and_dates_are_usable(supplied_sheet):
 
 def test_order_total_is_split_across_its_line_items(supplied_sheet):
     rows = import_rows(supplied_sheet, None, lambda m: None)
-    multi = [r for r in rows if r["order_id"] == "OD337974610559"]
+    multi = [r for r in rows if r["order_id"] == "OD337974610559997100"]
     assert all(r["amount"] == pytest.approx(2579 / 4, abs=0.01) for r in multi)
 
 
@@ -203,7 +203,7 @@ def test_imported_workbook_is_readable_by_the_agent(supplied_sheet, tmp_path):
     assert len(tasks) == 6
     assert all(t.is_pending for t in tasks)
     assert all(t.return_window_days is not None for t in tasks)
-    assert {t.sku for t in tasks if t.order_id == "OD337974610559"} == {
+    assert {t.sku for t in tasks if t.order_id == "OD337974610559997100"} == {
         "JEAHJHY3CBJYNZNW", "JEAH87B2GRCCS3DZ", "DREHHF5SKMVFGUKU", "DREHK6H2PN8XX6ZM",
     }
 

@@ -78,7 +78,7 @@ class MockOrder:
 FLIPKART_ORDERS = [
     # Clean single-item return — the happy path.
     MockOrder(
-        "OD337960018546",
+        "OD337960018546978100",
         "flipkart",
         [
             MockItem(
@@ -92,7 +92,7 @@ FLIPKART_ORDERS = [
     ),
     # Past its window — the agent must skip it without opening a return.
     MockOrder(
-        "OD337915105120",
+        "OD337915105120141100",
         "flipkart",
         [
             MockItem(
@@ -106,7 +106,7 @@ FLIPKART_ORDERS = [
     ),
     # Already cancelled and refunded upstream.
     MockOrder(
-        "OD337915012166",
+        "OD337915012166989100",
         "flipkart",
         [
             MockItem(
@@ -119,7 +119,7 @@ FLIPKART_ORDERS = [
     ),
     # Not delivered yet.
     MockOrder(
-        "OD337983703007",
+        "OD337983703007211100",
         "flipkart",
         [
             MockItem(
@@ -133,7 +133,7 @@ FLIPKART_ORDERS = [
     ),
     # The partial-success centrepiece: four SKUs on one order, four fates.
     MockOrder(
-        "OD337974610559",
+        "OD337974610559997100",
         "flipkart",
         [
             MockItem(

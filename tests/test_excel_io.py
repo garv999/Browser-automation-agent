@@ -22,7 +22,7 @@ def test_seeded_workbook_reads_back_as_line_items(workbook):
     assert all(t.task_status == TaskStatus.PENDING for t in tasks)
 
     # The four-SKU Flipkart order must be four separate rows, not one.
-    multi = [t for t in tasks if t.order_id == "OD337974610559"]
+    multi = [t for t in tasks if t.order_id == "OD337974610559997100"]
     assert len(multi) == 4
     assert len({t.row for t in multi}) == 4
     assert len({t.sku for t in multi}) == 4
@@ -30,8 +30,8 @@ def test_seeded_workbook_reads_back_as_line_items(workbook):
 
 def test_write_outcome_touches_only_its_own_row(workbook):
     tasks = read_tasks(workbook)
-    target = next(t for t in tasks if t.order_id == "OD337974610559")
-    siblings = [t for t in tasks if t.order_id == "OD337974610559" and t.row != target.row]
+    target = next(t for t in tasks if t.order_id == "OD337974610559997100")
+    siblings = [t for t in tasks if t.order_id == "OD337974610559997100" and t.row != target.row]
 
     write_outcome(
         workbook,
@@ -82,7 +82,7 @@ def test_needs_review_statuses_map_to_needs_review():
 
 def test_order_is_settled_only_when_every_item_has_a_state(workbook):
     tasks = read_tasks(workbook)
-    order = "OD337974610559"
+    order = "OD337974610559997100"
     items = [t for t in tasks if t.order_id == order]
 
     assert not excel_io.order_is_fully_settled(tasks, order)

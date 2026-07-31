@@ -16,8 +16,8 @@ from mock_site.server import STATE
 
 pytestmark = pytest.mark.e2e
 
-MULTI_ITEM_ORDER = "OD337974610559"
-CLEAN_ORDER = "OD337960018546"
+MULTI_ITEM_ORDER = "OD337974610559997100"
+CLEAN_ORDER = "OD337960018546978100"
 
 
 def test_transient_platform_error_is_retried(workbook_for, run_agent, rows_by_sku):

@@ -8,7 +8,7 @@ reads. Two differences matter, and both are structural rather than cosmetic:
    insensitive and alias-driven, so the file does not have to be edited by hand
    before a run.
 
-2. **Multi-item orders live in one cell.** Order `OD337974610559` has four product
+2. **Multi-item orders live in one cell.** Order `OD337974610559997100` has four product
    links stacked in a single `Product Link` cell, interleaved with pasted chat
    text (`[8:23 pm, 26/06/2026] Arti Faym C: Take a look at this…`). One cell is
    four line items, and the whole point of the brief is that each gets its own
