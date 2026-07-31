@@ -50,19 +50,33 @@ MOCK_SELECTORS = Selectors(
     refund_amount_field="[data-testid='refund-amount']",
 )
 
+# Verified against live flipkart.com on 2026-07-31 with a logged-in session.
+# Findings that corrected earlier guesses:
+#   * /orders is a dead URL; the order history lives at /account/orders.
+#   * The detail page is /order_details?order_id=OD... The href in the history
+#     list also carries item_id and unit_id, because **Flipkart's order detail
+#     page is per line item, not per order** — each SKU on an order gets its own
+#     URL. That is why Flipkart is a sequential-flow platform: there is no page
+#     on which several line items of one order are returnable together.
+#   * Flipkart's class names are hashed and rotate (div._1OwMU0 and friends all
+#     matched nothing), so these selectors avoid them and key on structure and
+#     visible text instead.
+# Still unverified: the return micro-flow below the "Return" control. The account
+# available for testing had no order inside its return window, so the reason,
+# refund-mode and confirmation selectors could not be exercised.
 LIVE_SELECTORS = Selectors(
     login_url="/account/login",
-    orders_url="/orders",
-    order_url_template="/orders?order_id={order_id}",
+    orders_url="/account/orders",
+    order_url_template="/order_details?order_id={order_id}",
     phone_input="input[type='text'][autocomplete='off']",
     phone_submit="button:has-text('Request OTP')",
     otp_input="input[type='text'][maxlength='6']",
     otp_submit="button:has-text('Verify')",
     logged_in_marker="text=My Account",
-    order_container="div._1OwMU0, div[class*='order-detail']",
-    line_item="div._1AtVbE:has(div._2-uHZH), div[class*='order-item']",
-    line_item_title="a._2Kn22P, div._2-uHZH",
-    line_item_amount="div._2-ut7f, div[class*='price']",
+    order_container="text=/^OD\\d+$/",
+    line_item="text=/^OD\\d+$/",
+    line_item_title="img[alt]",
+    line_item_amount="text=/^₹[0-9,]+$/",
     return_button="button:has-text('Return'), a:has-text('Return')",
     return_unavailable="text=/Return window closed|not eligible for return|Return period over/i",
     reason_select="div[class*='reason'] select, select",
