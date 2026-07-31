@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Orders</h1>
+
+<ul class="orders">
+  {% for order in orders %}
+    <li class="order-row">
+      <a href="/{{ platform }}/orders/{{ order.order_id }}">{{ order.order_id }}</a>
+      <span class="muted">{{ order.items|length }} item(s)</span>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,104 @@
+:root {
+  --ink: #1f2933;
+  --muted: #6b7785;
+  --line: #dfe3e8;
+  --accent: #2874f0;
+  --danger: #b3261e;
+  --bg: #f4f5f7;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 15px/1.5 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+body.platform-amazon { --accent: #e47911; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.brand { color: #fff; font-weight: 700; text-decoration: none; letter-spacing: .3px; }
+.account { font-size: 13px; opacity: .95; }
+
+.wrap { max-width: 880px; margin: 28px auto; padding: 0 20px; }
+
+h1 { font-size: 22px; margin: 0 0 8px; }
+h2 { font-size: 17px; margin: 28px 0 8px; }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 22px;
+}
+.card.narrow { max-width: 460px; }
+
+.muted { color: var(--muted); font-size: 13px; }
+.error { color: var(--danger); font-size: 13px; }
+
+label { display: block; margin: 16px 0 6px; font-size: 13px; font-weight: 600; }
+
+input[type="text"], select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+  background: #fff;
+}
+
+button, .btn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 18px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button, .btn.primary { background: var(--accent); color: #fff; }
+
+.orders, .items { list-style: none; padding: 0; margin: 16px 0 0; }
+
+.order-row, .item {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-link { color: var(--ink); font-weight: 600; text-decoration: none; }
+.item-link:hover { color: var(--accent); }
+
+.meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; }
+
+.unavailable {
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  background: #fdf1f0;
+  border-left: 3px solid var(--danger);
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.summary { display: grid; grid-template-columns: 140px 1fr; gap: 8px 16px; margin: 18px 0 0; }
+.summary dt { color: var(--muted); font-size: 13px; }
+.summary dd { margin: 0; font-weight: 600; }
+
+.foot { text-align: center; color: var(--muted); font-size: 12px; padding: 32px 0; }

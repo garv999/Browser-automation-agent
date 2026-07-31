@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+
+# Browser profile — holds a real logged-in session; never commit it.
+.browser-profile/
+
+# Run artefacts
+logs/
+analytics/outputs/transactions.db

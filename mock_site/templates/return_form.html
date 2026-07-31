@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+  <h1>Return item</h1>
+  <p class="muted">{{ item.title }} &middot; Order {{ order.order_id }}</p>
+
+  <form method="post" action="/{{ platform }}/returns/create">
+    <input type="hidden" name="order_id" value="{{ order.order_id }}">
+    <input type="hidden" name="index" value="{{ index }}">
+
+    <label for="reason">Reason for return</label>
+    <select id="reason" name="reason" data-testid="reason-select">
+      {% for reason in reasons %}
+        <option value="{{ reason }}">{{ reason }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="refund">Refund mode</label>
+    <select id="refund" name="refund_mode" data-testid="refund-mode">
+      {% for mode in refund_modes %}
+        <option value="{{ mode }}">{{ mode }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="comment">Additional comments (optional)</label>
+    <textarea id="comment" name="comment" rows="3" data-testid="return-comment"></textarea>
+
+    <button type="submit" data-testid="confirm-return">Confirm return</button>
+  </form>
+</div>
+{% endblock %}

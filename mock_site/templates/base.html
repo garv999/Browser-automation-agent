@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ platform|default('Mock Store')|title }}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/store.css">
+</head>
+<body class="platform-{{ platform|default('none') }}">
+  <header class="topbar">
+    <a class="brand" href="/{{ platform }}/orders">{{ platform|default('mock')|title }}</a>
+    {% if session.get(platform ~ '_authed') %}
+      <nav class="account" data-testid="account-menu">
+        My Account &middot; {{ session.get(platform ~ '_phone', '') }}
+      </nav>
+    {% endif %}
+  </header>
+
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="foot">
+    Local mock storefront — no real orders, no real refunds.
+  </footer>
+</body>
+</html>

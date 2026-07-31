@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+  <h1>Login</h1>
+  <p class="muted">Enter your mobile number to receive a one-time password.</p>
+
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <form method="post" action="/{{ platform }}/account/login">
+    <label for="phone">Mobile number</label>
+    <input id="phone" name="phone" type="text" autocomplete="off"
+           data-testid="phone-input" placeholder="10-digit mobile number">
+    <button type="submit" data-testid="phone-submit">Request OTP</button>
+  </form>
+</div>
+{% endblock %}

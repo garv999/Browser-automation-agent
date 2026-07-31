@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" data-testid="order-detail" data-order-id="{{ order.order_id }}">
+  <h1>Order {{ order.order_id }}</h1>
+  <p class="muted">Delivered to {{ order.address }}</p>
+
+  {% if show_batch %}
+    {# Amazon's multi-item entry point. Absent on orders that do not support it,
+       which is what forces the adapter's sequential fallback. #}
+    <a class="btn primary" data-testid="batch-return-entry"
+       href="/{{ platform }}/returns/batch/{{ order.order_id }}">Return or replace items</a>
+  {% endif %}
+
+  <ul class="items">
+    {% for view in views %}
+      {% set item = view.item %}
+      <li class="item" data-testid="line-item" data-product-id="{{ item.product_id }}">
+        {# The product link comes first so that adapters reading "the first
+           anchor in the row" get the product, not the Return control. #}
+        <a class="item-link" data-testid="item-title"
+           href="https://www.{{ platform }}.com/p/itm{{ item.product_id|lower }}?pid={{ item.product_id }}&marketplace={{ platform|upper }}">
+          {{ item.title }}
+        </a>
+
+        <div class="meta">
+          <span data-testid="item-amount">&#8377;{{ '%.2f'|format(item.amount) }}</span>
+          <span class="muted">Qty {{ item.quantity }}</span>
+          <span class="muted">Delivered {{ item.delivery_date.strftime('%d %b %Y') }}</span>
+          <span class="muted">{{ item.return_window_days }} day return window</span>
+        </div>
+
+        {% if view.show_button %}
+          <a class="btn" data-testid="return-button"
+             href="/{{ platform }}/returns/new/{{ order.order_id }}/{{ view.index }}">Return</a>
+        {% elif view.unavailable %}
+          <p class="unavailable" data-testid="return-unavailable">{{ view.unavailable }}</p>
+        {% else %}
+          {# Neither a button nor an explanation: the sheet's "support needed"
+             case. The agent must flag this rather than guess. #}
+          <p class="muted">Need help with this item? Contact support.</p>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow" data-testid="return-confirmation">
+  <h1>Return request placed</h1>
+  <p class="muted">{{ item.title }}</p>
+
+  <dl class="summary">
+    <dt>Return ID</dt>
+    <dd data-testid="return-id">{{ entry.return_id }}</dd>
+
+    <dt>Refund amount</dt>
+    <dd data-testid="refund-amount">&#8377;{{ '%.2f'|format(entry.refund_amount) }}</dd>
+
+    <dt>Reason</dt>
+    <dd>{{ entry.reason }}</dd>
+  </dl>
+
+  <a class="btn" href="/{{ platform }}/orders/{{ order.order_id }}">Back to order</a>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" data-testid="return-confirmation">
+  <h1>Return request submitted</h1>
+  <p class="muted">Order {{ order.order_id }} — each item has its own return ID.</p>
+
+  {# Rendered in a different order from the order page on purpose: an adapter
+     that matches confirmations positionally will attach the wrong return ID. #}
+  <ul class="items">
+    {% for entry, item in pairs %}
+      <li class="item" data-testid="confirmed-item" data-product-id="{{ entry.product_id }}">
+        <strong>{{ item.title }}</strong>
+        <div class="meta">
+          <span data-testid="return-id">{{ entry.return_id }}</span>
+          <span data-testid="refund-amount">&#8377;{{ '%.2f'|format(entry.refund_amount) }}</span>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

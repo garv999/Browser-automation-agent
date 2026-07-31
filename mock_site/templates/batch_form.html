@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h1>Return or replace items</h1>
+  <p class="muted">Order {{ order.order_id }} — select the items you want to return.</p>
+
+  <form method="post" action="/{{ platform }}/returns/batch">
+    <input type="hidden" name="order_id" value="{{ order.order_id }}">
+
+    <ul class="items">
+      {% for view in views %}
+        {% set item = view.item %}
+        {# Every line item gets a checkbox, including ineligible ones (disabled),
+           so positional indexing stays aligned with the order page. #}
+        <li class="item">
+          <label>
+            <input type="checkbox" name="item" value="{{ view.index }}"
+                   data-testid="batch-item"
+                   {% if not view.show_button %}disabled{% endif %}>
+            {{ item.title }} — &#8377;{{ '%.2f'|format(item.amount) }}
+          </label>
+
+          {% if view.show_button %}
+            <select name="reason_{{ view.index }}" data-testid="reason-select-{{ view.index }}">
+              {% for reason in reasons %}
+                <option value="{{ reason }}">{{ reason }}</option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <span class="unavailable">{{ view.unavailable or 'Not eligible for return' }}</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <button type="submit" data-testid="confirm-return">Submit return request</button>
+  </form>
+</div>
+{% endblock %}

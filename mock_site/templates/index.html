@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Mock storefront{% endblock %}
+{% block content %}
+<h1>Mock storefront</h1>
+<p class="muted">
+  Two fake platforms with real return flows. Log in with any 10-digit number and
+  the OTP <code>123456</code>.
+</p>
+
+<ul class="orders">
+  <li><a href="/flipkart/orders">Flipkart — sequential returns</a></li>
+  <li><a href="/amazon/orders">Amazon — batch returns</a></li>
+</ul>
+
+<h2>Fixture orders</h2>
+<ul class="orders">
+  {% for order in orders %}
+    <li class="order-row">
+      <a href="/{{ order.platform }}/orders/{{ order.order_id }}">{{ order.order_id }}</a>
+      <span class="muted">{{ order.platform }} &middot; {{ order.items|length }} item(s)</span>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

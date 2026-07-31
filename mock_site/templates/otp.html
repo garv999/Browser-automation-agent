@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+  <h1>Verify OTP</h1>
+  <p class="muted">A 6-digit code was sent to {{ phone }}.</p>
+
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <form method="post" action="/{{ platform }}/account/otp">
+    <label for="otp">One-time password</label>
+    <input id="otp" name="otp" type="text" maxlength="6" autocomplete="off" data-testid="otp-input">
+    <button type="submit" data-testid="otp-submit">Verify</button>
+  </form>
+</div>
+{% endblock %}
